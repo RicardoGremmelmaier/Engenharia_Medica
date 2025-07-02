@@ -2,11 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import find_peaks
 
-file_path = 'dataset/otávioPepe.txt'
+file_path = 'dataset/RicardoGremme.txt'
 
-# === ETAPA 1: Leitura das duas colunas ===
-pressao_bracadeira = []     # Coluna 0: pressão medida na braçadeira 
-pressao_oscilatoria = []    # Coluna 1: pressão oscilatória
+pressao_bracadeira = []    
+pressao_oscilatoria = []    
 
 with open(file_path, 'r') as f:
     for linha in f:
@@ -20,7 +19,6 @@ with open(file_path, 'r') as f:
             except ValueError:
                 continue
 
-# === ETAPA 2: Plot comparativo ===
 plt.figure(figsize=(12,5))
 plt.plot(pressao_bracadeira, label='Pressão do paciente', color='orange')
 plt.plot(pressao_oscilatoria, label='Pressão da braçadeira', color='blue')
