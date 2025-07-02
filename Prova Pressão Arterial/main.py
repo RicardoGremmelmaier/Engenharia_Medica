@@ -85,7 +85,6 @@ print(f"Pressão Diastólica estimada: {pressao_diastolica} mmHg (≈ 85% do pic
 plt.figure(figsize=(12,5))
 plt.plot(pressao_bracadeira, label='Pressão do paciente', color='orange')
 plt.plot(pressao_oscilatoria, label='Oscilação', color='blue')
-plt.plot(picos_absolutos, pressao_oscilatoria[picos_absolutos], 'ro', label='Picos detectados')
 
 plt.plot(indice_sistolica, pressao_oscilatoria[indice_sistolica], 'go', label='Sistólica (55%)')
 plt.plot(indice_diastolica, pressao_oscilatoria[indice_diastolica], 'mo', label='Diastólica (85%)')
