@@ -2,74 +2,101 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import find_peaks
 
-file_path = 'dataset/RicardoGremme.txt'
+file_path = 'dataset/otávioPepe.txt'
 
-# Leitura dos dados
-pressure_values = []
+# === ETAPA 1: Leitura das duas colunas ===
+pressao_bracadeira = []     # Coluna 0: pressão medida na braçadeira 
+pressao_oscilatoria = []    # Coluna 1: pressão oscilatória
+
 with open(file_path, 'r') as f:
-    for line in f:
-        parts = line.strip().split(';')
-        if len(parts) == 2:
+    for linha in f:
+        partes = linha.strip().split(';')
+        if len(partes) == 2:
             try:
-                time = int(parts[0].strip())
-                value = int(parts[1].strip())
-                pressure_values.append((time, value))
+                p_bra = int(partes[0].strip())
+                p_osc = int(partes[1].strip())
+                pressao_bracadeira.append(p_bra)
+                pressao_oscilatoria.append(p_osc)
             except ValueError:
                 continue
 
-# Separar listas de tempo e valor
-times, pressures = zip(*pressure_values)
-
-# Plotar o gráfico da pressão ao longo do tempo
-plt.figure(figsize=(12, 5))
-plt.plot(pressures, label='Pressão detectada (bruta)', color='blue')
-plt.title('Leitura do Sensor de Pressão')
-plt.xlabel('Amostra')
-plt.ylabel('Valor do Sensor')
-plt.grid(True)
+# === ETAPA 2: Plot comparativo ===
+plt.figure(figsize=(12,5))
+plt.plot(pressao_bracadeira, label='Pressão do paciente', color='orange')
+plt.plot(pressao_oscilatoria, label='Pressão da braçadeira', color='blue')
 plt.legend()
+plt.title("Pressão do Paciente vs Braçadeira")
+plt.xlabel("Amostra")
+plt.ylabel("Valor do Sensor")
+plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-pressures_np = np.array(pressures)
 
-# Aplica média móvel
-window = 50  
-moving_average = np.convolve(pressures_np, np.ones(window)/window, mode='same')
+pressao_oscilatoria = np.array(pressao_oscilatoria)
+pressao_bracadeira = np.array(pressao_bracadeira)
 
-# Sinal oscilatório = sinal original - tendência
+inicio = 1100
 
-osc = pressures_np - moving_average
-start = 1500
-end = 5000
-osc_util = osc[start:end]
+oscilacao_recorte = pressao_oscilatoria[inicio:]
+bracadeira_recorte = pressao_bracadeira[inicio:]
 
-# Detectar picos (batimentos)
-sampling_rate = 45  
-max_bpm = 110
-min_dist_amostras = int(sampling_rate * 60 / max_bpm)
-amplitude_max = np.max(osc_util) - np.min(osc_util)
-prominencia_min = amplitude_max * 0.2  
-min_distance = int(sampling_rate / 3)
-peaks_rel, _ = find_peaks(osc_util, distance=min_distance, prominence=prominencia_min)
-peaks = peaks_rel + start
+picos, _ = find_peaks(oscilacao_recorte, distance=10, prominence=1)
 
-# Calcular BPM com base nos intervalos entre picos
-intervals = np.diff(peaks)
-time_between_peaks = intervals / sampling_rate
-bpm = 60 / np.mean(time_between_peaks)
+picos_absolutos = picos + inicio
 
-print(f"BPM estimado: {bpm:.2f}")
-print(f"Número de batimentos detectados: {len(peaks)}")
-
-# Plotar o sinal oscilatório com os picos
-plt.figure(figsize=(12, 5))
-plt.plot(osc, label='Sinal Oscilatório (batimentos)', color='purple')
-plt.plot(peaks, osc[peaks], 'ro', label='Batimentos Detectados')
-plt.title('Sinal Oscilatório com Picos')
-plt.xlabel('Amostra')
-plt.ylabel('Oscilação')
-plt.grid(True)
+plt.figure(figsize=(12,5))
+plt.plot(pressao_bracadeira, label='Pressão do paciente', color='orange')
+plt.plot(pressao_oscilatoria, label='Pressão da braçadeira (oscilatória)', color='blue')
+plt.plot(picos_absolutos, pressao_oscilatoria[picos_absolutos], 'ro', label='Picos detectados')
 plt.legend()
+plt.title("Detecção de Picos nas Oscilações (após início da desinflação)")
+plt.xlabel("Amostra")
+plt.ylabel("Valor do Sensor")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+indice_map = picos_absolutos[np.argmax(pressao_oscilatoria[picos_absolutos])]
+valor_map = pressao_oscilatoria[indice_map]
+pressao_map = pressao_bracadeira[indice_map]
+
+print(f"MAP detectada: {pressao_map} mmHg (amplitude máxima = {valor_map})")
+
+alvo_sistolica = 0.55 * valor_map
+alvo_diastolica = 0.85 * valor_map
+
+picos_antes_map = [i for i in picos_absolutos if i < indice_map]
+picos_depois_map = [i for i in picos_absolutos if i > indice_map]
+
+indice_sistolica = min(
+    picos_antes_map,
+    key=lambda i: abs(pressao_oscilatoria[i] - alvo_sistolica)
+)
+pressao_sistolica = pressao_bracadeira[indice_sistolica]
+
+indice_diastolica = min(
+    picos_depois_map,
+    key=lambda i: abs(pressao_oscilatoria[i] - alvo_diastolica)
+)
+pressao_diastolica = pressao_bracadeira[indice_diastolica]
+
+print(f"Pressão Sistólica estimada: {pressao_sistolica} mmHg (≈ 55% do pico)")
+print(f"Pressão Diastólica estimada: {pressao_diastolica} mmHg (≈ 85% do pico)")
+
+plt.figure(figsize=(12,5))
+plt.plot(pressao_bracadeira, label='Pressão do paciente', color='orange')
+plt.plot(pressao_oscilatoria, label='Oscilação', color='blue')
+plt.plot(picos_absolutos, pressao_oscilatoria[picos_absolutos], 'ro', label='Picos detectados')
+
+plt.plot(indice_sistolica, pressao_oscilatoria[indice_sistolica], 'go', label='Sistólica (55%)')
+plt.plot(indice_diastolica, pressao_oscilatoria[indice_diastolica], 'mo', label='Diastólica (85%)')
+plt.plot(indice_map, pressao_oscilatoria[indice_map], 'ko', label='MAP (100%)')
+
+plt.legend()
+plt.title("Cálculo da Pressão Arterial com base nos picos oscilatórios")
+plt.xlabel("Amostra")
+plt.ylabel("Valor do Sensor")
+plt.grid(True)
 plt.tight_layout()
 plt.show()
