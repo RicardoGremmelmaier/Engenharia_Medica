@@ -20,8 +20,8 @@ with open(file_path, 'r') as f:
                 continue
 
 plt.figure(figsize=(12,5))
-plt.plot(pressao_bracadeira, label='Pressão do paciente', color='orange')
-plt.plot(pressao_oscilatoria, label='Pressão da braçadeira', color='blue')
+plt.plot(pressao_bracadeira, label='Pressão da braçadeira', color='orange')
+plt.plot(pressao_oscilatoria, label='Pressão do paciente (oscilatória)', color='blue')
 plt.legend()
 plt.title("Pressão do Paciente vs Braçadeira")
 plt.xlabel("Amostra")
@@ -44,8 +44,8 @@ picos, _ = find_peaks(oscilacao_recorte, distance=10, prominence=1)
 picos_absolutos = picos + inicio
 
 plt.figure(figsize=(12,5))
-plt.plot(pressao_bracadeira, label='Pressão do paciente', color='orange')
-plt.plot(pressao_oscilatoria, label='Pressão da braçadeira (oscilatória)', color='blue')
+plt.plot(pressao_bracadeira, label='Pressão da braçadeira', color='orange')
+plt.plot(pressao_oscilatoria, label='Pressão do paciente (oscilatória)', color='blue')
 plt.plot(picos_absolutos, pressao_oscilatoria[picos_absolutos], 'ro', label='Picos detectados')
 plt.legend()
 plt.title("Detecção de Picos nas Oscilações (após início da desinflação)")
@@ -83,8 +83,8 @@ print(f"Pressão Sistólica estimada: {pressao_sistolica} mmHg (≈ 55% do pico)
 print(f"Pressão Diastólica estimada: {pressao_diastolica} mmHg (≈ 85% do pico)")
 
 plt.figure(figsize=(12,5))
-plt.plot(pressao_bracadeira, label='Pressão do paciente', color='orange')
-plt.plot(pressao_oscilatoria, label='Oscilação', color='blue')
+plt.plot(pressao_bracadeira, label='Pressão da braçadeira', color='orange')
+plt.plot(pressao_oscilatoria, label='Pressão oscilatória', color='blue')
 
 plt.plot(indice_sistolica, pressao_oscilatoria[indice_sistolica], 'go', label='Sistólica (55%)')
 plt.plot(indice_diastolica, pressao_oscilatoria[indice_diastolica], 'mo', label='Diastólica (85%)')
