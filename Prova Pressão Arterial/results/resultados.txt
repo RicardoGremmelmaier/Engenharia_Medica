@@ -1,0 +1,39 @@
+AdamPaiva: 111/79                                       N/S
+Ana: 93/84                                              N/N
+AndersonPrado: 123/84                                   N/S
+BrunoMa: 125/80                                         N/S
+felipeeugranio: 105/79                                  N/S
+F�bioFukuda: 127/86                                    S/S
+GuilhermeRosseto: 103/76                                S/S
+Isabela: 76/71                                          N/S
+JonatanSilva: 81/48                                     N/N
+LuisHatsu: 120/61                                       S/S
+MarcosSim�o: 109/104                                   N/N
+MariaGoes: 126/81                                       S/S
+ot�vioPepe: 105/71                                     S/S
+PedroSouza: 78/60                                       N/N
+RafaelMer: 70/45                                        N/S
+RaphaelDiniz: 92/82                                     N/S
+RicardoGremme: 133/84                                   S/S
+Vinicius: 118/111                                       N/S
+
+
+AdamPaiva: 139/75
+Ana: 121/77
+AndersonPrado: 145/79
+BrunoMa: 141/84
+felipeeugranio: 132/85
+F�bioFukuda: 125/73
+GuilhermeRosseto: 107/73
+Isabela: 106/79
+JonatanSilva: 170/84
+LuisHatsu: 123/79
+MarcosSim�o: 156/82
+MariaGoes: 124/74
+ot�vioPepe: 109/67
+PedroSouza: 143/60
+RafaelMer: 108/56
+RaphaelDiniz: 122/84
+RicardoGremme: 130/87
+Vinicius: 141/93
+
