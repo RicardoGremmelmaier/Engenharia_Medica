@@ -63,10 +63,10 @@ void loop() {
     else if (mean < threshold) {aboveThreshold = false;}
 
     Serial.print(mean); Serial.print(";");
-    Serial.println(getRespiratoryRate(currentMillis)); Serial.print(";");
+    Serial.print(getRespiratoryRate(currentMillis)); Serial.print(";");
     Serial.print(minValue); Serial.print(";");
     Serial.print(maxValue); Serial.print(";");
-    Serial.print(threshold); Serial.print(";");
+    Serial.print(threshold); Serial.println(";");
   }
 }
 
