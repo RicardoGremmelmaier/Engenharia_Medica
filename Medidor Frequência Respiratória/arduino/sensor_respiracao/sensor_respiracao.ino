@@ -63,7 +63,7 @@ void loop() {
     else if (mean < threshold) {aboveThreshold = false;}
 
     Serial.print(mean); Serial.print(";");
-    Serial.print(getRespiratoryRate(currentMillis)); Serial.print(";");
+    Serial.print(getRespiratoryRate()); Serial.print(";");
     Serial.print(minValue); Serial.print(";");
     Serial.print(maxValue); Serial.print(";");
     Serial.print(threshold); Serial.println(";");
@@ -80,7 +80,7 @@ void registerPeak(unsigned long time){
   }
 }
 
-int getRespiratoryRate(unsigned long currentMillis) {
+int getRespiratoryRate() {
   if (peaksCounter < 2) {
     return 0;
   }
