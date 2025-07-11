@@ -24,7 +24,7 @@ void setup() {
   pinMode(greenLed, OUTPUT);
 
   digitalWrite(greenLed, HIGH);  // Início da calibração
-  calibrateSensor(8000);
+  calibrateSensor(9000);
   digitalWrite(greenLed, LOW);
 
   delay(500);
