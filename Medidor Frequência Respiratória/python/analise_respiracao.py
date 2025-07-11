@@ -4,7 +4,8 @@ import matplotlib.animation as animation
 from collections import deque
 
 
-PORTA = 'COM7'       # Substituir a porta
+PORTA = 'COM7'          # Substituir a porta para Windows
+#PORTA = 'dev/ttyUSB0'  # Substituir a porta para Linux
 BAUDRATE = 9600
 
 ser = serial.Serial(PORTA, BAUDRATE)
